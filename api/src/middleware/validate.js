@@ -1,4 +1,3 @@
-import { registerSchema, loginSchema } from "../validators/auth.validator";
 
 
 export const validate = (schema) => {
@@ -15,4 +14,6 @@ export const validate = (schema) => {
         req.body = result.data;
         next();
     }
+
+    console.log(registerSchema.safeParse({ name: "A", email: "bad", password: "123" }));
 }

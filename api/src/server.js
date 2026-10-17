@@ -1,8 +1,10 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
-import productRoutes from "./routes/product.route.js";
 import cookieParser from "cookie-parser";
+
+import productRoutes from "./routes/product.route.js";
+import authRoutes from "./routes/auth.route.js";
 
 
 
@@ -19,6 +21,7 @@ app.use(cookieParser());
 
 //Routing
 app.use ("/api/products", productRoutes);
+app.use ("/api/auth", authRoutes);
 
 
 app.get("/hello/:name",(req,res) => {
