@@ -40,7 +40,7 @@ export async function login(req, res) {
     }
 }
 
-export async function getUserById(req, res){
+export async function me(req, res){
     try {
         const user = await getUserById(req.user.id);
 

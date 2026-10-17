@@ -6,7 +6,7 @@ export default function ProductCard({ product }) {
 
   return (
     <Link href={`/products/${product.slug}`} className="product-card">
-      <div className="image-placeholder">No image yet</div>
+      <div className="image-placeholder">No image</div>
       <div className="product-card-body">
         <h2>{product.name}</h2>
         <p className="category">{product.category.name}</p>

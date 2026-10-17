@@ -15,8 +15,8 @@ const body = Fredoka({
 });
 
 export const metadata = {
-  title: "ChoClo",
-  description: "Clothing with a sweet side",
+  title: "ChoClo.",
+  description: "Simple and fast store",
 };
 
 export default function RootLayout({ children }) {
