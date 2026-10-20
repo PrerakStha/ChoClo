@@ -1,7 +1,6 @@
 import { formatPrice } from "../../lib/format.js";
 import ProductCard from "../../components/ProductCard.js";
 
-
 export default async function ProductsPage() {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/`, {
         cache: "no-store",
@@ -14,8 +13,12 @@ export default async function ProductsPage() {
 
     return (
         <main className="container">
-            <h1 className="page-title">All Products</h1>
-            <p className="page-subtitle">{products.length} items</p>
+            <div className="page-header-wrap">
+                <div>
+                    <h1 className="page-title">Catalog</h1>
+                </div>
+                <p className="page-subtitle">{products.length} products available</p>
+            </div>
             {products.length === 0 ? (
                 <p>No products found.</p>
             ) : (
