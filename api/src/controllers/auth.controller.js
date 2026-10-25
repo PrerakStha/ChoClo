@@ -12,7 +12,8 @@ function handleError(err, res) {
     if (err.status) {
         return res.status(err.status).json({ message: err.message });
     }
-
+    console.log(err);
+    return res.status(500).json({message: "Something went wrong."})
 };
 
 export async function register(req, res) {
@@ -34,10 +35,12 @@ export async function login(req, res) {
             ...COOKIE_OPTIONS,
             maxAge: COOKIE_MAX_AGE //max time the cookie is active
         });
+        res.status(200).json(user)
     }
     catch (err) {
         handleError(err, res);
     }
+
 }
 
 export async function me(req, res){

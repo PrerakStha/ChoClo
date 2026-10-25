@@ -27,10 +27,10 @@ export default function RegisterPage() {
 
 
     try {
-      await api("/api/auth/register", { method: POST, body: form });
+      await api("/api/auth/register", { method: "POST", body: form });
       router.push("/login");
     } catch (err) {
-      if (err.fieldErrors.length > 0) {
+      if (err.fieldErrors?.length > 0) {
         setFieldErrors(err.fieldErrors);
       } else {
         setError(err.message);

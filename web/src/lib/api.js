@@ -4,8 +4,8 @@ export async function api(path, { method = "GET", body } = {}) {
     const res = await fetch(`${API_URL}${path}`, {
         method,
         credentials: "include",
-        headers: body ? { "Content-Type:": "application/json" } : undefined,
-        body: body ? JSON.stringify.body : undefined
+        headers: body ? { "Content-Type": "application/json" } : undefined,
+        body: body ? JSON.stringify(body) : undefined
     });
 
     let data = null;
