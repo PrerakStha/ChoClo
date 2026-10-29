@@ -37,8 +37,8 @@ function shapeCart(cart) {
 
     return {
         items,
-        itemCount: items.reduce((sum, item) => { sum + item.quantity }, 0),
-        subTotal: items.reduce((sum, item) => { sum + item.lineTotal }, 0)
+        itemCount: items.reduce((sum, item) => sum + item.quantity , 0),
+        subTotal: items.reduce((sum, item) => sum + item.lineTotal , 0)
     }
 };
 
@@ -69,7 +69,7 @@ export async function addItem(userId, { variantId, quantity }) {
         create: { userId },
     });
 
-    const existing = await prisma.createItem.findUnique({
+    const existing = await prisma.cartItem.findUnique({
         where: { cartId_variantId: { cartId: cart.id, variantId } },
     })
 

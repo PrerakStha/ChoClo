@@ -1,4 +1,6 @@
 import * as productService from "../services/product.service.js";
+import { handleError } from "../utils/handleError.js";
+
 
 export async function listProducts(req, res) {
     try {
@@ -6,8 +8,7 @@ export async function listProducts(req, res) {
         res.json(products);
     }
     catch (err) {
-        console.log(err);
-        res.status(500).json({ error: "Something went wrong." });
+        handleError(err,res)
     }
 }
 
@@ -17,8 +18,7 @@ export async function getProduct(req,res){
         if (!products) return res.status(404).json({error: "product not found"});
         res.json(products);
     }
-    catch(error){
-        console.log(err);
-        res.status(500).json({error: "Error fetching the products."});
+    catch(err){
+        handleError(err,res)
     }
 }

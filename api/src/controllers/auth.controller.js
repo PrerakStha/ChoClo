@@ -1,5 +1,6 @@
 import { registerUser, loginUser, getUserById } from "../services/auth.service.js";
 import jwt from "jsonwebtoken";
+import { handleError } from "../utils/handleError.js";
 
 const COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 const COOKIE_OPTIONS = {
@@ -7,14 +8,6 @@ const COOKIE_OPTIONS = {
     sameSite: "lax", //doesnt attach cookie on most cross-site req
     secure: process.env.NODE_ENV === "production", //httpOnly in production because localhost runs on http
 }
-
-function handleError(err, res) {
-    if (err.status) {
-        return res.status(err.status).json({ message: err.message });
-    }
-    console.log(err);
-    return res.status(500).json({message: "Something went wrong."})
-};
 
 export async function register(req, res) {
     try {

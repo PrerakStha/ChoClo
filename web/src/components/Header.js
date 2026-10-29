@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useCart } from "@/context/CartContext";
 
 export default function Header() {
   const {user,loading,logout}=useAuth();
   const router = useRouter();
+  const cart = useCart();
 
 
   async function handleLogout() {
@@ -23,6 +25,7 @@ export default function Header() {
           {!loading && (user ? (
             <>
               <span className="nav-user">Hi, {user.name}</span>
+              <Link href="/cart">Cart{cart.itemCount>0 && <span className="cart-badge">{cart.itemCount}</span>}</Link>
               <button className="nav-btn" onClick={handleLogout}>Logout</button>
             </>
           ) : (

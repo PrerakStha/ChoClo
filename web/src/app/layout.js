@@ -3,6 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
+import { CartProvider } from "@/context/CartContext";
 
 const display = Lilita_One({
   weight: "400",
@@ -25,9 +26,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${display.variable} ${body.variable}`}>
         <AuthProvider>
+          <CartProvider>
         <Header />
         {children}
         <Footer />
+        </CartProvider>
         </AuthProvider>
       </body>
     </html>
