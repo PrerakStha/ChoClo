@@ -18,7 +18,8 @@ model User {
   passwordHash String
   role         String   @default("customer")
   createdAt    DateTime @default(now())
-  cart Cart?
+  cart         Cart?
+  orders       Order[]
 }
 
 model Category {
@@ -42,34 +43,82 @@ model Product {
 }
 
 model ProductVariant {
-  id        Int     @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   size      String
   color     String
-  stock     Int     @default(0)
-  sku       String  @unique
+  stock     Int         @default(0)
+  sku       String      @unique
   productId Int
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product     @relation(fields: [productId], references: [id])
   cartItems CartItem[]
+  orderItem OrderItem[]
 }
 
 model Cart {
-  id Int @id @default(autoincrement())
-  userId Int @unique
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items CartItem[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int        @id @default(autoincrement())
+  userId    Int        @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model CartItem {
-  id Int @id @default(autoincrement())
-  cartId Int 
-  cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  id        Int            @id @default(autoincrement())
+  cartId    Int
+  cart      Cart           @relation(fields: [cartId], references: [id], onDelete: Cascade)
   variantId Int
-  variant ProductVariant @relation(fields: [variantId], references:[id], onDelete: Cascade)
-  quantity Int @default(1)
-  createdAt DateTime @default(now())
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  quantity  Int            @default(1)
+  createdAt DateTime       @default(now())
 
   @@unique([cartId, variantId])
+}
 
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  COD
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Order {
+  id              Int           @id @default(autoincrement())
+  userId          Int
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status          OrderStatus   @default(PENDING)
+  paymentMethod   PaymentMethod @default(COD)
+  paymentStatus   PaymentStatus @default(UNPAID)
+  shippingName    String
+  shippingAddress String
+  shippingCity    String
+  shippingPhone   String
+  items           OrderItem[]
+  total           Int
+  createdAt       DateTime      @default(now())
+}
+
+model OrderItem {
+  id          Int             @id @default(autoincrement())
+  orderId     Int
+  order       Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variantId   Int?
+  variant     ProductVariant? @relation(fields: [variantId], references: [id], onDelete: Restrict)
+  color       String
+  quantity    Int
+  productName String
+  size        String
+  unitPrice   Int
 }

@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import productRoutes from "./routes/product.route.js";
 import authRoutes from "./routes/auth.route.js";
 import cartRoutes from "./routes/cart.route.js";
+import orderRoutes from "./routes/order.route.js"
 
 const app = express();
 
@@ -22,5 +23,6 @@ app.use(cookieParser());
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/order", orderRoutes)
 
 app.listen(5000, () => console.log("API RUNNING ON PORT 5000"));
