@@ -26,6 +26,7 @@ export default function Header() {
             <>
               <span className="nav-user">Hi, {user.name}</span>
               <Link href="/cart">Cart{cart.itemCount>0 && <span className="cart-badge">{cart.itemCount}</span>}</Link>
+              <Link href="/orders">Orders</Link>
               <button className="nav-btn" onClick={handleLogout}>Logout</button>
             </>
           ) : (

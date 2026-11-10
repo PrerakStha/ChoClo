@@ -142,10 +142,9 @@ export default function CartPage() {
           <div className="summary-row summary-total">
             <span>Subtotal</span>
             <span>{formatPrice(cart.subTotal)}</span>
+            
           </div>
-          <button type="button" className="btn">
-            Checkout
-          </button>
+          <Link href="/checkout" className = "btn">Checkout</Link>
         </aside>
       </div>
     </main>

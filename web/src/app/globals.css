@@ -544,6 +544,85 @@ h3 {
 .cart-summary .btn {
   width: 100%;
 }
+
+/* ---------- Links styled as buttons ---------- */
+a.btn {
+  display: inline-block;
+  text-align: center;
+}
+
+/* ---------- Checkout ---------- */
+.checkout-form {
+  padding: 1.5rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+}
+
+.checkout-form h2 {
+  font-size: 1.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.checkout-form .btn {
+  width: 100%;
+}
+
+.summary-lines {
+  list-style: none;
+  margin-bottom: 1rem;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  font-size: 0.95rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.summary-note {
+  margin-top: 0.8rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- Orders ---------- */
+.order-line {
+  grid-template-columns: 1fr auto;
+}
+
+.order-row {
+  grid-template-columns: 1fr auto auto;
+  transition: border-color 0.15s ease;
+}
+
+.order-row:hover {
+  border-color: var(--text-muted);
+}
+
+.order-total {
+  margin-top: 1rem;
+}
+
+.cart-summary p {
+  color: var(--text-main);
+}
+
+.cart-summary p.summary-note {
+  color: var(--text-muted);
+}
+
+.status-pill {
+  padding: 0.2rem 0.8rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  background: var(--surface-cream);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+}
+
 /* ---------- Variant picker ---------- */
 .options {
   display: flex;

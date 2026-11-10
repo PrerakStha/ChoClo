@@ -84,7 +84,7 @@ export async function listOrders(userId){
 }
 
 export async function getOrder(userId, orderId){
-    const order =  prisma.order.findFirst({
+    const order =  await prisma.order.findFirst({
         where: {id : orderId, userId: userId},
         include: {items: true},
     });

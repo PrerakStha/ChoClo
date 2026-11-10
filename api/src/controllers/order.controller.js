@@ -29,7 +29,7 @@ export async function getMyOrders(req, res) {
 export async function getMyOrder(req, res) {
   try {
     const orderId = Number(req.params.id);
-    if (!Number.isInteger(orderId) || orderId < 1) {
+   if (!Number.isInteger(orderId) || orderId < 1){
       return res.status(400).json({ message: "Invalid order id" });
     }
     const order = await getOrder(req.user.id, orderId);

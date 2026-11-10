@@ -23,6 +23,6 @@ app.use(cookieParser());
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/cart", cartRoutes);
-app.use("/api/order", orderRoutes)
+app.use("/api/orders", orderRoutes)
 
 app.listen(5000, () => console.log("API RUNNING ON PORT 5000"));

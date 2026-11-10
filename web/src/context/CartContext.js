@@ -14,10 +14,14 @@ export function CartProvider({ children }) {
 
   const [cart, setCart] = useState(Empty_Cart);
   const [loading, setLoading] = useState(true);
+  const [loadedFor, setLoadedFor]= useState(null);
+
+  const ready = Boolean(userId) && loadedFor === userId;
 
   useEffect(() => {
     if (!userId) {
       setCart(Empty_Cart);
+      setLoadedFor(null); // Reset when logged out
       return;
     }
     let cancelled = false;
@@ -25,10 +29,16 @@ export function CartProvider({ children }) {
 
     api("/api/cart")
       .then((data) => {
-        if (!cancelled) setCart(data);
+        if (!cancelled) {
+          setCart(data);
+          setLoadedFor(userId); // <--- Mark as loaded for this user!
+        }
       })
       .catch(() => {
-        if (!cancelled) setCart(Empty_Cart);
+        if (!cancelled) {
+          setCart(Empty_Cart);
+          setLoadedFor(userId); // <--- Also mark as loaded (even if empty) so it doesn't hang
+        }
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -38,6 +48,16 @@ export function CartProvider({ children }) {
       cancelled = true;
     };
   }, [userId]);
+
+  async function refreshCart(){
+    try{
+      const data = await api("/api/cart");
+      setCart(data);
+    }
+    catch{
+      setCart(Empty_Cart)
+    }
+  }
 
   async function addToCart(variantId,quantity=1){
     const updated = await api("/api/cart/items",{
@@ -63,7 +83,7 @@ export function CartProvider({ children }) {
   }
 
   return(
-    <CartContext.Provider value = {{cart,loading, addToCart,updateQuantity,removeItem }}>
+    <CartContext.Provider value = {{cart,loading, ready, refreshCart, addToCart,updateQuantity,removeItem }}>
         {children}
     </CartContext.Provider>
   )
