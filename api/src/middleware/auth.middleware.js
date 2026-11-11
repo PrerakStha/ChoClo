@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import prisma from "../config/db.js";
+import { handleError } from "../utils/handleError.js";
 
 export function requireAuth(req,res,next){
     const token = req.cookies?.token;
@@ -17,9 +19,22 @@ export function requireAuth(req,res,next){
     next();
 }
 
-export function requireAdmin(req,res,next){
-    if(req.user?.role!=="admin"){
-        return res.status(401).json({message: "Not an admin."})
+export async function requireAdmin(req,res,next){
+    try{
+        const user = await prisma.user.findUnique({
+            where: {id: req.user.id},
+            select: {role: true},
+        })
+
+        if (!user || user.role!== "admin"){
+            return res.statuss(404).json({message: "Forbidden"})
+        }
+        next();
     }
-next();
+    
+    catch(error){
+        handleError(error,res);
+    }
+    
+
 }
