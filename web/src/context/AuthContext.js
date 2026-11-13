@@ -10,7 +10,7 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        api("api/auth/me")
+        api("/api/auth/me")
             .then(setUser)
             .catch(() => setUser(null))
             .finally(() => setLoading(false));
@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
     }
 
     async function logout() {
-        await api("api/auth/logout", { method: "POST" });
+        await api("/api/auth/logout", { method: "POST" });
         setUser(null);
     }
 

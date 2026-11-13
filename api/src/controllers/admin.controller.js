@@ -5,7 +5,7 @@ import { handleError } from "../utils/handleError.js";
 function handler(fn) {
   return async (req, res) => {
     try {
-      await fn(req.res);
+      await fn(req,res);
     } catch (error) {
       handleError(error, res);
     }
@@ -25,15 +25,17 @@ res.json(await admin.listProducts());
 })
 
 export const getProduct = handler(async(req,res)=>{
-    res.json(await admin.getProductById(idParam(req)));
+    res.json(await admin.getProductById(idParams(req)));
 })
 
-export const createProdcut = handler(async(req,res)=>{
+export const createProduct = handler(async(req,res)=>{
     res.status(201).json(await admin.createProduct(req.body) )
 })
 
+export const createProdcut = createProduct;
+
 export const updateProduct = handler(async(req,res)=>{
-    res.json(await admin.updateProduct(idParam(req),req.body));
+    res.json(await admin.updateProduct(idParams(req),req.body));
 })
 
 export const deleteProduct = handler(async(req,res)=>{

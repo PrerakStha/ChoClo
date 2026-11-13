@@ -6,43 +6,36 @@ import { useAuth } from "@/context/AuthContext";
 
 const CartContext = createContext(null);
 
-const Empty_Cart = { items: [], itemCount: 0, subTotal: 0 };
+const EMPTY_CART = { items: [], itemCount: 0, subTotal: 0 };
 
 export function CartProvider({ children }) {
   const { user } = useAuth();
   const userId = user?.id;
 
-  const [cart, setCart] = useState(Empty_Cart);
-  const [loading, setLoading] = useState(true);
-  const [loadedFor, setLoadedFor]= useState(null);
+  const [cart, setCart] = useState(EMPTY_CART);
+  const [loadedFor, setLoadedFor] = useState(null);
 
   const ready = Boolean(userId) && loadedFor === userId;
+  const loading = Boolean(userId) && !ready;
+  const visibleCart = ready ? cart : EMPTY_CART;
 
   useEffect(() => {
-    if (!userId) {
-      setCart(Empty_Cart);
-      setLoadedFor(null); // Reset when logged out
-      return;
-    }
+    if (!userId) return;
     let cancelled = false;
-    setLoading(true);
 
     api("/api/cart")
       .then((data) => {
         if (!cancelled) {
           setCart(data);
-          setLoadedFor(userId); // <--- Mark as loaded for this user!
+          setLoadedFor(userId);
         }
       })
       .catch(() => {
         if (!cancelled) {
-          setCart(Empty_Cart);
-          setLoadedFor(userId); // <--- Also mark as loaded (even if empty) so it doesn't hang
+          setCart(EMPTY_CART);
+          setLoadedFor(userId);
         }
       })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
 
     return () => {
       cancelled = true;
@@ -53,9 +46,11 @@ export function CartProvider({ children }) {
     try{
       const data = await api("/api/cart");
       setCart(data);
+      setLoadedFor(userId);
     }
     catch{
-      setCart(Empty_Cart)
+      setCart(EMPTY_CART);
+      setLoadedFor(userId);
     }
   }
 
@@ -83,7 +78,7 @@ export function CartProvider({ children }) {
   }
 
   return(
-    <CartContext.Provider value = {{cart,loading, ready, refreshCart, addToCart,updateQuantity,removeItem }}>
+    <CartContext.Provider value = {{cart: visibleCart,loading, ready, refreshCart, addToCart,updateQuantity,removeItem }}>
         {children}
     </CartContext.Provider>
   )

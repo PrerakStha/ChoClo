@@ -1,6 +1,5 @@
-import prisma from "prisma";
-import { httpError } from "../utils/httpError";
-import { includes } from "zod";
+import prisma from "../config/db.js";
+import { httpError } from "../utils/httpError.js";
 
 const productInclude = { category: true, variants: { orderBy: { id: "asc" } } };
 const orderInclude = {
@@ -41,7 +40,7 @@ export function listProducts() {
 }
 
 export async function getProductById(id) {
-  const product = prisma.product.findUnique({
+  const product = await prisma.product.findUnique({
     where: { id },
     include: productInclude,
   });
@@ -72,13 +71,13 @@ export async function createProduct(data) {
       include: productInclude,
     });
   } catch (error) {
-    if (err.code === "P2002") {
+    if (error.code === "P2002") {
       throw httpError(
         409,
         "A product or variant with these details already exists",
       );
     }
-    throw err;
+    throw error;
   }
 }
 
@@ -99,7 +98,14 @@ export async function updateProduct(id, data) {
 }
 
 export async function deleteProduct(id) {
-  await getProductById(id);
+  const product = await getProductById(id);
+  const variantIds = product.variants.map((variant) => variant.id);
+  const orderedVariantCount = await prisma.orderItem.count({
+    where: { variantId: { in: variantIds } },
+  });
+  if (orderedVariantCount > 0) {
+    throw httpError(409, "Products with order history cannot be deleted");
+  }
 
   await prisma.$transaction([
     prisma.productVariant.deleteMany({ where: { productId: id } }),
@@ -111,11 +117,11 @@ export async function addVariant(productId, data) {
   const product = await getProductById(productId);
 
   try {
-    prisma.productVariant.create({
+     await prisma.productVariant.create({
       data: { ...data, productId, sku: makeSku(product.slug, data) },
     });
   } catch (error) {
-    if (err.code === "P2002") {
+    if (error.code === "P2002") {
       throw httpError(
         409,
         "A product or variant with these details already exists",
@@ -136,7 +142,14 @@ export async function deleteVariant(variantId) {
     where: { productId: variant.productId },
   });
   if (count <= 1) {
-    throw httpError(409, "A product needs atleast one variant");
+    throw httpError(409, "A product needs at least one variant");
+  }
+
+  const orderItemCount = await prisma.orderItem.count({
+    where: { variantId },
+  });
+  if (orderItemCount > 0) {
+    throw httpError(409, "Variants with order history cannot be deleted");
   }
 
   await prisma.productVariant.delete({ where: { id: variantId } });
@@ -160,15 +173,15 @@ export async function listCategories(){
     return category;
 }
 
-export async function createCategory({name}){
+export async function createCategory({ name }) {
     const slug = await uniqueSlug(prisma.category, name, "category");
-    try{
-        return await prisma.category.create({data:{name, slug}});
-    }
-    catch(error){
-         if (err.code === "P2002") {
-      throw httpError(409, "That color and size already exists for this product");
-    }
+    try {
+        return await prisma.category.create({ data: { name, slug } });
+    } catch (error) {
+        if (error.code === "P2002") {
+            throw httpError(409, "Category already exists");
+        }
+        throw error;
     }
 }
 

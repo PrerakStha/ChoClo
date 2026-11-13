@@ -27,7 +27,7 @@ export async function requireAdmin(req,res,next){
         })
 
         if (!user || user.role!== "admin"){
-            return res.statuss(404).json({message: "Forbidden"})
+            return res.status(403).json({message: "Forbidden"})
         }
         next();
     }

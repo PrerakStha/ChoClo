@@ -35,12 +35,8 @@ export default function CheckoutPage(){
         }
     },[authLoading, user, ready, cart.items.length, router]);
 
-    useEffect(()=>{
-        if(user?.name){
-            setForm((f)=>(f.shippingName ? f: {...f, shippingName: user.name}));
-        }
-    }, [user]);
-    
+    const shippingName = form.shippingName || user?.name || "";
+
     function handleChange(e){
         setForm({...form, [e.target.name]: e.target.value});
     }
@@ -54,7 +50,8 @@ export default function CheckoutPage(){
         setSubmitting(true);
 
         try{
-            const order = await api("/api/orders", { method : "POST", body: form});
+            const payload = { ...form, shippingName };
+            const order = await api("/api/orders", { method : "POST", body: payload});
             orderPlaced.current = true;
             await refreshCart();
             router.push(`/orders/${order.id}`);
@@ -73,20 +70,11 @@ export default function CheckoutPage(){
             setSubmitting(false);
         }
     }
-   console.log({authLoading, user, ready});
     if(authLoading || !user || !ready ){
      
         return (
             <main className = "container">
                 <p>Loading content....</p>
-            </main>
-        )
-    }
-
-    if(cart.items.length === 0 && !orderPlaced.current){
-        return (
-            <main className = "container">
-                <p>Redirecting to cart...</p>
             </main>
         )
     }
@@ -101,7 +89,7 @@ export default function CheckoutPage(){
 
           <div className="field">
             <label htmlFor="shippingName">Full name</label>
-            <input id="shippingName" name="shippingName" value={form.shippingName} onChange={handleChange} />
+            <input id="shippingName" name="shippingName" value={shippingName} onChange={handleChange} />
             {fieldError("shippingName") && <p className="field-error">{fieldError("shippingName")}</p>}
           </div>
 
@@ -153,7 +141,7 @@ export default function CheckoutPage(){
 
           <div className="summary-row summary-total">
             <span>Subtotal</span>
-            <span>{formatPrice(cart.subtotal)}</span>
+            <span>{formatPrice(cart.subTotal)}</span>
           </div>
           <p className="summary-note">Payment: cash on delivery</p>
         </aside>
