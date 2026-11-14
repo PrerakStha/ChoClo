@@ -1,6 +1,7 @@
 import express from "express";
 import * as c from "../controllers/admin.controller.js";
 import { requireAuth, requireAdmin } from "../middleware/auth.middleware.js";
+import { uploadImage } from "../middleware/upload.middleware.js";
 import { validate } from "../middleware/validate.js";
 import {
   createProductSchema,
@@ -9,6 +10,7 @@ import {
   updateVariantSchema,
   categorySchema,
   orderStatusSchema,
+  orderImagesSchema,
 } from "../validators/admin.validator.js";
 
 
@@ -31,5 +33,10 @@ router.post("/categories", validate(categorySchema), c.createCategory);
 
 router.get("/orders", c.listOrders);
 router.patch("/orders/:id/status", validate(orderStatusSchema), c.updateOrderStatus);
+
+router.post("/products/:id/images", uploadImage, c.addImages)
+router.patch("/products/:id/images/order", validate(orderImagesSchema), c.reorderImages )
+router.delete("/images/:id", c.deleteImage)
+
 
 export default router;

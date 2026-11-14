@@ -52,3 +52,10 @@ export const orderStatusSchema = z.object({
     message: "Invalid status",
   }),
 });
+
+export const orderImagesSchema = z.object({
+  imageIds: z
+    .array(z.number().int().positive(), "imageIds must be a list")
+    .min(1, "Send the image ids in their new order")
+    .max(20, "Too many images"),
+});

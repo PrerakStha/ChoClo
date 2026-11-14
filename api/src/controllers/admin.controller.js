@@ -1,6 +1,7 @@
 import * as admin from "../services/admin.service.js";
 import { httpError } from "../utils/httpError.js";
 import { handleError } from "../utils/handleError.js";
+import { id } from "zod/v4/locales";
 
 function handler(fn) {
   return async (req, res) => {
@@ -68,4 +69,16 @@ export const listOrders = handler(async(req,res)=>{
 
 export const updateOrderStatus = handler(async(req,res)=>{
     res.json(await admin.updateOrderStatus(idParams(req), req.body.status))
+})
+
+export const addImages = handler(async(req,res)=>{
+    res.json(await admin.addProductImages(idParams(req), req.files))
+})
+
+export const reorderImages = handler(async(req,res)=>{
+    res.json(await admin.reorderImages(idParams(req), req.body.imageIds))
+})
+
+export const deleteImage = handler(async(req,res)=>{
+    res.json(await admin.deleteImage(idParams(req)))
 })
