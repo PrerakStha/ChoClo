@@ -3,10 +3,34 @@ import { formatPrice } from "@/lib/format";
 
 export default function ProductCard({ product }) {
   const colors = [...new Set(product.variants.map((v) => v.color))];
+  const [ main, hover ] = product.images ?? [];
 
   return (
     <Link href={`/products/${product.slug}`} className="product-card">
-      <div className="image-placeholder">No image</div>
+         {main ? (
+        <div className="card-image">
+          <Image
+            src={imageUrl(main.url, 600)}
+            alt={main.alt || product.name}
+            fill
+            unoptimized
+            className="card-img"
+          />
+          {hover && (
+            <Image
+              src={imageUrl(hover.url, 600)}
+              alt=""
+              aria-hidden="true"
+              fill
+              unoptimized
+              className="card-img card-img-hover"
+            />
+          )}
+        </div>
+      ) : (
+        <div className="image-placeholder">No image yet</div>
+      )}
+
       <div className="product-card-body">
         <h2>{product.name}</h2>
         <p className="category">{product.category.name}</p>

@@ -935,3 +935,119 @@ a.btn {
   color: var(--text-muted);
   font-size: 0.95rem;
 }
+
+/* ---------- Product images ---------- */
+.card-image {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--surface-cream);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.card-img {
+  object-fit: cover;
+}
+
+.card-img-hover {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+@media (hover: hover) {
+  .product-card:hover .card-img-hover {
+    opacity: 1;
+  }
+}
+
+/* ---------- Gallery ---------- */
+.gallery {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.gallery-main {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--surface-cream);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+}
+
+.gallery-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.thumb {
+  position: relative;
+  width: 72px;
+  aspect-ratio: 4 / 5;
+  padding: 0;
+  overflow: hidden;
+  background: var(--surface-cream);
+  border: 2px solid var(--border-subtle);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.thumb:hover {
+  border-color: var(--text-muted);
+}
+
+.thumb.selected {
+  border-color: var(--accent);
+}
+
+/* ---------- Admin image manager ---------- */
+.image-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.image-tile {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.image-thumb {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--surface-cream);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+}
+
+.image-tag {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.image-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.image-actions .btn-small {
+  padding: 0.25rem 0.6rem;
+}
+
+.image-actions .link-btn {
+  margin-left: auto;
+}
+
+.upload-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+}

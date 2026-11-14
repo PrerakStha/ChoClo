@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { formatPrice } from "@/lib/format";
 import AddToCart from "@/components/AddToCart"
+import ProductGallery from "@/components/ProductGallery";
 
 export default async function ProductDetailPage({params}){
 const { slug } = await params;
@@ -24,7 +25,7 @@ const product = await res.json();
 return (
   <main className="container">
     <div className="detail">
-      <div className="image-placeholder">No image yet</div>
+      <ProductGallery images={product.images} name={product.name} />
 
       <div>
         <p className="category">{product.category.name}</p>

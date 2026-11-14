@@ -6,6 +6,7 @@ import Link from "next/link";
 import { api } from "@/lib/api";
 import ProductForm from "@/components/admin/ProductForm";
 import VariantManager from "@/components/admin/VariantManager";
+import ImageManager from "@/components/admin/ImageManager";
 
 export default function EditProductPage() {
   const { id } = useParams();
@@ -36,6 +37,7 @@ export default function EditProductPage() {
       <h1 className="page-title">Edit: {product.name}</h1>
       <div className="admin-stack">
         <ProductForm product={product} onSaved={setProduct} />
+        <ImageManager product={product} onChange={setProduct} />
         <VariantManager product={product} onChange={setProduct} />
       </div>
     </section>
