@@ -33,8 +33,6 @@ export const createProduct = handler(async(req,res)=>{
     res.status(201).json(await admin.createProduct(req.body) )
 })
 
-export const createProdcut = createProduct;
-
 export const updateProduct = handler(async(req,res)=>{
     res.json(await admin.updateProduct(idParams(req),req.body));
 })

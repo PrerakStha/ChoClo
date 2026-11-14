@@ -10,7 +10,7 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: MAX_SIZE, files: MAX_FILES },
   fileFilter: (req, file, cb) => {
-    if (!ALLOWED_TYPES) {
+    if (!ALLOWED_TYPES.includes(file.mimetype)) {
       return cb(httpError(400, "Only Webp, JPEG and PNG format is allowed."));
     }
     cb(null, true);

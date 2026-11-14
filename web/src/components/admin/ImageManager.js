@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import { api } from "@/lib/api";
-import { imageUrl } from "@/lib/images";
+import { imageUrl } from "@/lib/image";
 
 const MAX_SIZE = 5 * 1024 * 1024;
 const MAX_FILES = 8;
@@ -14,11 +14,11 @@ export default function ImageManager({ product, onChange }) {
   const [error, setError] = useState("");
   const images = product.images ?? [];
 
-  async function run(action) {
+  async function run( action) {
     setBusy(true);
     setError("");
     try {
-      const updated = await action;
+      const updated = await action();
       onChange(updated);
     } catch (err) {
       setError(err.fieldErrors?.[0]?.message || err.message);
@@ -59,13 +59,13 @@ export default function ImageManager({ product, onChange }) {
 
   function move(index, direction) {
     const target = index + direction;
-    if ((target = 0 || target >= images.length)) return;
+    if ((target < 0 || target >= images.length)) return;
 
     const ids = images.map((i) => i.id);
     [ids[index], ids[target]] = [ids[target], ids[index]];
 
-    run(() => {
-      api(`/api/admin/products/${product.id}/images/order`, {
+    run(async () => {
+      return await api(`/api/admin/products/${product.id}/images/order`, {
         method: "PATCH",
         body: { imageIds: ids },
       });

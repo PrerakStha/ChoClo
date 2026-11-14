@@ -1,9 +1,6 @@
 import prisma from "../config/db.js";
 import { httpError } from "../utils/httpError.js";
 import cloudinary from "../config/cloudinary.js";
-import { Result } from "pg";
-import { positive } from "zod";
-import { id } from "zod/v4/locales";
 
 const MAX_IMAGES_PER_PRODUCT = 10;
 
@@ -340,7 +337,7 @@ export async function reorderImages(productId, imageIds) {
   await getProductById(productId);
 
   const images = await prisma.productImage.findMany({
-    where: { id: { productId } },
+    where: { id: productId  },
   });
   const current = images.map((img) => img.id).sort((a, b) => a - b);
   const given = [...imageIds].sort((a, b) => a - b);

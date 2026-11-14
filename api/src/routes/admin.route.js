@@ -19,7 +19,7 @@ const router = express.Router();
 router.use(requireAuth, requireAdmin);
 
 router.get("/products", c.listProducts);
-router.post("/products", validate(createProductSchema),c.createProdcut)
+router.post("/products", validate(createProductSchema),c.createProduct)
 router.get("/products/:id", c.getProduct)
 router.put("/products/:id", validate(updateProductSchema), c.updateProduct)
 router.delete("/products/:id", c.deleteProduct);

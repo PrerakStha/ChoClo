@@ -1,12 +1,13 @@
-export function imageUrl(url, width=600){
-    if(!url){
-        return null; 
-    }
+export function imageUrl(url, width = 300) {
+  if (!url) return "";
 
-    const marker = "/upload";
-    if(!url.includes("res.cloudinary.com") || !url.includes(marker)) return url;
+  // If it's a Cloudinary URL, safely inject transformation options right after /upload/
+  if (url.includes("/upload/")) {
+    const [base, path] = url.split("/upload/");
+    // Clean up any leading slashes from the path if they exist
+    const cleanPath = path.replace(/^\/+/, "");
+    return `${base}/upload/w_${width},c_limit,f_auto,q_auto/${cleanPath}`;
+  }
 
-    return url.replace(marker,`${marker}w_${width},c_limit,f_auto,q_auto/`);
-
-
+  return url;
 }

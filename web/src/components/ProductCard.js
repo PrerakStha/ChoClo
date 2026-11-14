@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
+import Image from "next/image";
+import { imageUrl } from "@/lib/image";
 
 export default function ProductCard({ product }) {
   const colors = [...new Set(product.variants.map((v) => v.color))];

@@ -69,7 +69,7 @@ export default function VariantManager({ product, onChange }) {
       {error && <p className="form-error">{error}</p>}
 
       <ul className="cart-lines">
-        {product.variants.map((v) => {
+        {(product?.variants ?? []).map((v) => {
           const value = stocks[v.id] ?? String(v.stock);
           const changed = stocks[v.id] !== undefined;
 
