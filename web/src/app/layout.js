@@ -1,24 +1,22 @@
-import { Lilita_One, Fredoka } from "next/font/google";
+import { Fraunces, DM_Sans } from "next/font/google";
+import "./globals.css";
+import { AuthProvider } from "@/context/AuthContext";
+import { CartProvider } from "@/context/CartContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { AuthProvider } from "@/context/AuthContext";
-import "./globals.css";
-import { CartProvider } from "@/context/CartContext";
+import RevealOnScroll from "@/components/RevealOnScroll";
 
-const display = Lilita_One({
-  weight: "400",
+const display = Fraunces({
   subsets: ["latin"],
+  style: ["normal", "italic"],
   variable: "--font-display",
 });
 
-const body = Fredoka({
-  subsets: ["latin"],
-  variable: "--font-body",
-});
+const body = DM_Sans({ subsets: ["latin"], variable: "--font-body" });
 
 export const metadata = {
-  title: "ChoClo.",
-  description: "Simple and fast store",
+  title: "ChoClo",
+  description: "Clothing from Nepal",
 };
 
 export default function RootLayout({ children }) {
@@ -27,10 +25,11 @@ export default function RootLayout({ children }) {
       <body className={`${display.variable} ${body.variable}`}>
         <AuthProvider>
           <CartProvider>
-        <Header />
-        {children}
-        <Footer />
-        </CartProvider>
+            <Header />
+            {children}
+            <Footer />
+            <RevealOnScroll />
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>

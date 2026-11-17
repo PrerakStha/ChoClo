@@ -337,7 +337,7 @@ export async function reorderImages(productId, imageIds) {
   await getProductById(productId);
 
   const images = await prisma.productImage.findMany({
-    where: { id: productId  },
+    where: { productId  },
   });
   const current = images.map((img) => img.id).sort((a, b) => a - b);
   const given = [...imageIds].sort((a, b) => a - b);
