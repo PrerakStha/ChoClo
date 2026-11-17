@@ -6,6 +6,10 @@ A full-stack clothing store built from scratch: customers browse products, pick 
 > **Repository:** https://github.com/PrerakStha/ChoClo/
 
 ![Home page](docs/screenshots/home.png)
+![Home page](docs/screenshots/home.png)
+![Products page](docs/screenshots/products.png)
+![Products Detail page](docs/screenshots/products1.png)
+![Admin page](docs/screenshots/admin.png)
 
 ## Features
 
@@ -158,6 +162,3 @@ Register a normal account on the site, then open `npx prisma studio` and change 
 - [ ] Rate limiting and security headers
 - [ ] Order emails
 
-## License
-
-_Choose a license, or remove this section._
