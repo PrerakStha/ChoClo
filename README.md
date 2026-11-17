@@ -2,8 +2,8 @@
 
 A full-stack clothing store built from scratch: customers browse products, pick a size and color, check out with cash on delivery, and follow their orders. Shop owners manage products, stock, images and orders from an admin panel.
 
-> **Live site:** _add your link here_  
-> **Repository:** _add your GitHub link here_
+> **Live site:** ToDo
+> **Repository:** https://github.com/PrerakStha/ChoClo/
 
 ![Home page](docs/screenshots/home.png)
 
