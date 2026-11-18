@@ -3,8 +3,15 @@ const nextConfig = {
   images: {
     remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }],
   },
-  /* config options here */
-  reactCompiler: true,
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: `${process.env.API_URL}/api/:path*`,
+      },
+    ];
+  },
+  reactStrictMode: true,
   turbopack: {
     rules: {
       "*.css": {

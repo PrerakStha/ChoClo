@@ -1,4 +1,7 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL =
+  typeof window === "undefined"
+    ? process.env.API_URL || process.env.NEXT_PUBLIC_API_URL
+    : "";
 
 export async function api(path, { method = "GET", body } = {}) {
   const isForm = typeof FormData !== "undefined" && body instanceof FormData;
@@ -9,7 +12,8 @@ export async function api(path, { method = "GET", body } = {}) {
       method,
       credentials: "include",
       // for files, the browser must set Content-Type itself (it adds the multipart boundary)
-      headers: body && !isForm ? { "Content-Type": "application/json" } : undefined,
+      headers:
+        body && !isForm ? { "Content-Type": "application/json" } : undefined,
       body: body ? (isForm ? body : JSON.stringify(body)) : undefined,
     });
   } catch {

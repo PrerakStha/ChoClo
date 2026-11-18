@@ -10,6 +10,7 @@ import orderRoutes from "./routes/order.route.js"
 import adminRoutes from "./routes/admin.route.js";
 
 const app = express();
+app.set("trust proxy", 1);
 
 const corsOptions = {
   origin: process.env.FRONTEND_URL || "https://cho-clo.vercel.app/",
