@@ -5,8 +5,9 @@ import { handleError } from "../utils/handleError.js";
 const COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 const COOKIE_OPTIONS = {
     httpOnly: true, //js cant read cookie in the page so no attackers
-    sameSite: "lax", //doesnt attach cookie on most cross-site req
-    secure: process.env.NODE_ENV === "production", //httpOnly in production because localhost runs on http
+    sameSite: "none", //doesnt attach cookie on most cross-site req
+    //secure: process.env.NODE_ENV === "production", //httpOnly in production because localhost runs on http
+    secure: true,
 }
 
 export async function register(req, res) {
