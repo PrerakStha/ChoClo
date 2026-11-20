@@ -15,7 +15,7 @@ const app = express();
 app.set("trust proxy", 1);
 
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "https://cho-clo.vercel.app/",
+  origin: process.env.FRONTEND_URL || "https://cho-clo.vercel.app",
   credentials: true,
 };
 
@@ -31,9 +31,9 @@ const limiterOptions = {
 
 const apiLimiter = rateLimit({
   ...limiterOptions,
-  windowsMs: 60 * 1000,
+  windowMs: 60 * 1000,
   limit: 300,
-  messsage: { message: "Too many requests, please slow down." },
+  message: { message: "Too many requests, please slow down." },
 });
 
 const authLimiter = rateLimit({
