@@ -22,7 +22,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
-app.use("trust proxy", 1);
 app.use(helmet());
 
 const limiterOptions = {
