@@ -1974,3 +1974,76 @@ a.btn {
 .policy li {
   margin-bottom: 0.4rem;
 }
+
+/* ---------- Shop filters and pagination ---------- */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 2rem;
+  padding: 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 22px;
+}
+
+.filters input[type="search"] {
+  flex: 1 1 220px;
+}
+
+.filters input[type="search"],
+.filters input[type="number"],
+.filters select {
+  padding: 0.6rem 1rem;
+  font: inherit;
+  color: var(--text-main);
+  background: var(--bg-cream);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+}
+
+.filters input[type="number"] {
+  width: 120px;
+}
+
+.filters input:focus,
+.filters select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.15);
+}
+
+.filters-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.4rem;
+  margin-top: 3rem;
+  color: var(--text-muted);
+}
+
+.pagination a {
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background: var(--surface-cream);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.pagination a:hover {
+  background: var(--marigold);
+}
+
+.pagination .disabled {
+  opacity: 0.4;
+}

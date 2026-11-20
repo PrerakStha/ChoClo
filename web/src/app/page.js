@@ -4,15 +4,16 @@ import { formatPrice } from "@/lib/format";
 import { imageUrl } from "@/lib/image";
 import { SITE } from "@/lib/site";
 
+
+
 async function getProducts() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`, {
-      cache: "no-store",
-    });
-    if (!res.ok) return [];
+    const api = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
+    const res = await fetch(`${api}/api/products`, { cache: "no-store" });
+    if (!res.ok) return { products: [], total: 0 };
     return await res.json();
   } catch {
-    return [];
+    return { products: [], total: 0 };
   }
 }
 
@@ -63,7 +64,7 @@ function DropTile({ product, index, isNew }) {
 }
 
 export default async function HomePage() {
-  const products = await getProducts();
+const { products, total } = await getProducts();
   const featured = products.slice(0, 3);
   const soonCount = Math.max(0, 3 - featured.length);
   const heroImage = products.find((p) => p.images?.length)?.images[0];
