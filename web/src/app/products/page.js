@@ -4,12 +4,24 @@ import ProductFilters from "@/components/ProductFilters";
 
 export const metadata = { title: "Shop | ChoClo" };
 
-const API = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
+
 const KEYS = ["search", "category", "minPrice", "maxPrice", "sort", "inStock", "page"];
+const API = (process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
 
 async function getJson(path) {
-  const res = await fetch(`${API}${path}`, { cache: "no-store" });
-  if (!res.ok) throw new Error("Failed to load products");
+  if (!API) {
+    throw new Error("Missing API_URL / NEXT_PUBLIC_API_URL environment variable");
+  }
+
+  const url = `${API}${path}`;
+  const res = await fetch(url, { cache: "no-store" });
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    console.error(`API error ${res.status} for ${url}:`, body);
+    throw new Error(`Failed to load ${path} (${res.status})`);
+  }
+
   return res.json();
 }
 
