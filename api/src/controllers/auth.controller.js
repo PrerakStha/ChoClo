@@ -2,13 +2,14 @@ import { registerUser, loginUser, getUserById } from "../services/auth.service.j
 import jwt from "jsonwebtoken";
 import { handleError } from "../utils/handleError.js";
 
+const isProduction = process.env.NODE_ENV === "production";
+
 const COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 const COOKIE_OPTIONS = {
-    httpOnly: true, //js cant read cookie in the page so no attackers
-    sameSite: "none", //doesnt attach cookie on most cross-site req
-    //secure: process.env.NODE_ENV === "production", //httpOnly in production because localhost runs on http
-    secure: true,
-}
+  httpOnly: true,
+  sameSite: isProduction ? "none" : "lax",
+  secure: isProduction,
+};
 
 export async function register(req, res) {
     try {

@@ -41,6 +41,7 @@ model Product {
   variants    ProductVariant[]
   images      ProductImage[]
   createdAt   DateTime         @default(now())
+  sizeChart Json?
 }
 
 model ProductImage {

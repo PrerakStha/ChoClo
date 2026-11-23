@@ -104,6 +104,7 @@ export default function Header() {
             <Link href="/" className="hdr-logo">{SITE.name}</Link>
             <nav className="hdr-nav" aria-label="Main">
               <Link href="/products">Shop</Link>
+               <Link href="/style">Style</Link>
               <Link href="/#story">Story</Link>
             </nav>
           </div>
@@ -148,6 +149,7 @@ export default function Header() {
         {menuOpen && (
           <nav className="hdr-mobile" aria-label="Mobile">
             <Link href="/products">Shop</Link>
+            <Link href="/style">Style</Link>
             <Link href="/#story">Story</Link>
             {user && <Link href="/orders">My orders</Link>}
             {isAdmin && <Link href="/admin/products">Admin</Link>}

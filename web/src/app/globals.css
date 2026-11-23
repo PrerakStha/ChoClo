@@ -2047,3 +2047,104 @@ a.btn {
 .pagination .disabled {
   opacity: 0.4;
 }
+
+/* ---------- Size finder and style assistant ---------- */
+.size-finder {
+  margin-top: 1.4rem;
+}
+
+.size-form {
+  margin-top: 0.8rem;
+  padding: 1.2rem;
+  background: var(--surface-cream);
+  border: 1px solid var(--border-subtle);
+  border-radius: 22px;
+}
+
+.size-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.8rem;
+  margin: 0.8rem 0 1rem;
+}
+
+.size-fields label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.size-fields input,
+.size-fields select,
+.style-form textarea {
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  font: inherit;
+  color: var(--text-main);
+  background: var(--bg-cream);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+}
+
+.size-result {
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.style-form {
+  max-width: 720px;
+  margin-bottom: 2.5rem;
+}
+
+.style-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.sample-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.consent {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.style-results {
+  margin-top: 1rem;
+}
+
+.style-colors {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1.2rem 0;
+  list-style: none;
+}
+
+.style-colors li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.8rem;
+  padding: 0.8rem 1.1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+}
+
+.style-colors span {
+  color: var(--text-muted);
+}
+
+.style-heading {
+  margin: 2rem 0 1rem;
+  font-size: 1.8rem;
+}

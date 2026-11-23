@@ -10,6 +10,7 @@ import authRoutes from "./routes/auth.route.js";
 import cartRoutes from "./routes/cart.route.js";
 import orderRoutes from "./routes/order.route.js";
 import adminRoutes from "./routes/admin.route.js";
+import recommendRoutes from "./routes/recommend.route.js";
 
 const app = express();
 app.set("trust proxy", 1);
@@ -52,5 +53,5 @@ app.use("/api/auth", authRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
-
+app.use("/api/recommend", recommendRoutes);
 app.listen(5000, () => console.log("API RUNNING ON PORT 5000"));

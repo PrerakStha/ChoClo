@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { formatPrice } from "@/lib/format";
 import AddToCart from "@/components/AddToCart"
 import ProductGallery from "@/components/ProductGallery";
+import SizeFinder from "@/components/SizeFinder";
+
 
 export default async function ProductDetailPage({params}){
 const { slug } = await params;
@@ -34,6 +36,7 @@ return (
         <p className="description">{product.description}</p>
 
         <AddToCart variants={product.variants} />
+        <SizeFinder productId={product.id} />
 
       </div>
     </div>
