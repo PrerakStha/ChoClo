@@ -71,6 +71,7 @@ export async function createProduct(data) {
         description: data.description,
         basePrice: data.basePrice,
         categoryId: data.categoryId,
+        modelUrl: data.modelUrl || null,
         variants: {
           create: data.variants.map((v) => ({ ...v, sku: makeSku(slug, v) })),
         },
@@ -97,9 +98,11 @@ export async function updateProduct(id, data) {
     });
     if (!category) throw httpError(404, "Category not found!");
   }
+  const patch = { ...data };
+  if ("modelUrl" in patch) patch.modelUrl = patch.modelUrl || null;
   return prisma.product.update({
     where: { id },
-    data,
+    data: patch,
     include: productInclude,
   });
 }
@@ -337,7 +340,7 @@ export async function reorderImages(productId, imageIds) {
   await getProductById(productId);
 
   const images = await prisma.productImage.findMany({
-    where: { productId  },
+    where: { productId },
   });
   const current = images.map((img) => img.id).sort((a, b) => a - b);
   const given = [...imageIds].sort((a, b) => a - b);

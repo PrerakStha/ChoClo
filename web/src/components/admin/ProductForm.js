@@ -15,6 +15,7 @@ export default function ProductForm({ product, onSaved }) {
     description: product?.description ?? "",
     price: product ? String(product.basePrice / 100) : "",
     categoryId: product ? String(product.categoryId) : "",
+    modelUrl: product?.modelUrl ?? "",
   });
 
   const [variants, setVariants] = useState([{ ...EMPTY_VARIANT }]);
@@ -31,7 +32,7 @@ export default function ProductForm({ product, onSaved }) {
       .catch((err) => {
         setError(err.message);
       });
-  },[]);
+  }, []);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -45,9 +46,7 @@ export default function ProductForm({ product, onSaved }) {
   }
 
   function addVariantRow() {
-    setVariants((list) => 
-      [...list, { ...EMPTY_VARIANT }],
-    );
+    setVariants((list) => [...list, { ...EMPTY_VARIANT }]);
   }
 
   function removeVariantRow(index) {
@@ -86,6 +85,7 @@ export default function ProductForm({ product, onSaved }) {
       description: form.description,
       basePrice: Math.round(Number(form.price) * 100),
       categoryId: Number(form.categoryId),
+      modelUrl: form.modelUrl.trim(),
     };
 
     if (!isEdit) {
@@ -115,7 +115,9 @@ export default function ProductForm({ product, onSaved }) {
     }
   }
   const errorFor = (name) => fieldErrors.find((e) => e.field === name)?.message;
-  const variantErrors = fieldErrors.filter((e) => e.field.startsWith("variants"));
+  const variantErrors = fieldErrors.filter((e) =>
+    e.field.startsWith("variants"),
+  );
   return (
     <form onSubmit={handleSubmit} noValidate className="checkout-form">
       <h2>{isEdit ? "Product details" : "New product"}</h2>
@@ -233,6 +235,20 @@ export default function ProductForm({ product, onSaved }) {
           ))}
         </div>
       )}
+
+      <div className="field">
+        <label htmlFor="modelUrl">3D model link (optional)</label>
+        <input
+          id="modelUrl"
+          name="modelUrl"
+          placeholder="/models/shirt.glb or https://..."
+          value={form.modelUrl}
+          onChange={handleChange}
+        />
+        {errorFor("modelUrl") && (
+          <p className="field-error">{errorFor("modelUrl")}</p>
+        )}
+      </div>
 
       {error && <p className="form-error">{error}</p>}
       {message && <p className="cart-message">{message}</p>}

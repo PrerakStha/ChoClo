@@ -27,7 +27,7 @@ const product = await res.json();
 return (
   <main className="container">
     <div className="detail">
-      <ProductGallery images={product.images} name={product.name} />
+      <ProductGallery images={product.images} name={product.name} modelUrl={product.modelUrl} />
 
       <div>
         <p className="category">{product.category.name}</p>
@@ -37,6 +37,7 @@ return (
 
         <AddToCart variants={product.variants} />
         <SizeFinder productId={product.id} />
+        
 
       </div>
     </div>

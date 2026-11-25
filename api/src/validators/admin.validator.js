@@ -10,6 +10,18 @@ const variantFields = {
     .max(100000, "Stock is too large"),
 };
 
+const modelUrlField = z
+  .string("Model link must be text")
+  .trim()
+  .max(500, "Link is too long")
+  .refine(
+    (v) =>
+      v === "" ||
+      ((v.startsWith("/models/") || /^https:\/\//i.test(v)) && /\.(glb|gltf)(\?.*)?$/i.test(v)),
+    "Use a link or a path like /models/shirt.glb that ends in .glb or .gltf"
+  );
+
+
 const productFields = {
   name: z.string("Name is required").trim().min(2, "Name must be at least 2 characters").max(100, "Name is too long"),
   description: z.string("Description is required").trim().min(2, "Description is required").max(2000, "Description is too long"),
@@ -19,6 +31,7 @@ const productFields = {
     .positive("Price must be greater than 0")
     .max(100000000, "Price is too large"),
   categoryId: z.number("Choose a category").int().positive("Choose a category"),
+  modelUrl: modelUrlField.optional(),
 };
 
 export const variantSchema = z.object(variantFields);

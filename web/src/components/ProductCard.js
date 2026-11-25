@@ -10,10 +10,11 @@ export default function ProductCard({ product }) {
   return (
     <Link href={`/products/${product.slug}`} className="product-card">
          {main ? (
-        <div className="card-image">
+        <div className="card-image" >
           <Image
             src={imageUrl(main.url, 600)}
             alt={main.alt || product.name}
+            
             fill
             unoptimized
             className="card-img"
