@@ -1,6 +1,6 @@
 # ChoClo
 
-A full-stack clothing store built from scratch: customers browse products, get AI-powered style and size recommendations, view products in 3D, pick a size and color, check out with cash on delivery, and follow their orders. Shop owners manage products, stock, images, 3D models and orders from an admin panel.
+A full-stack clothing store built from scratch: customers browse products, get AI-assisted style suggestions and size recommendations from product size charts, view products in 3D, pick a size and color, check out with cash on delivery, and follow their orders. Shop owners manage products, stock, images, 3D models and orders from an admin panel.
 
 > **Live site:** [cho-clo.vercel.app](https://cho-clo.vercel.app)
 > **Repository:** https://github.com/PrerakStha/ChoClo/
@@ -9,7 +9,7 @@ A full-stack clothing store built from scratch: customers browse products, get A
 ![Products page](docs/screenshots/products.png)
 ![Products Detail page](docs/screenshots/products1.png)
 ![Admin page](docs/screenshots/admin.png)
-![AI Recommend](docs/screenshots//AIRecommend.png)
+![AI Recommend](docs/screenshots/AIRecommend.png)
 ![AI Answer](docs/screenshots/AIAnswer.png)
 
 ## Features
@@ -20,9 +20,11 @@ A full-stack clothing store built from scratch: customers browse products, get A
 - Responsive home page with a header that changes as you scroll, and a footer with a live Nepal clock
 
 **AI and 3D**
-- Personalised style recommendations from the Google Gemini API, based on the customer's skin, hair and body structure
-- Size recommendations based on the customer's fit preferences
+- Style suggestions from the Google Gemini API, based on a customer's description and, optionally, a photo they consent to share. Suggestions are limited to colors that are currently in stock.
+- Size suggestions calculated by the server from the product's size chart, the customer's chest measurement, optional waist measurement, fit preference and available stock; this does not use Gemini.
 - Interactive 3D product viewer built with Google's `model-viewer`; admins upload a GLB model for each product
+
+Style photos are held in memory by the API for the request and are not saved by the app. They are sent to Google Gemini for analysis, so the provider may handle them under its own terms.
 
 **Accounts**
 - Register, log in and log out
@@ -51,7 +53,7 @@ A full-stack clothing store built from scratch: customers browse products, get A
 | ORM | Prisma 7 with the `pg` driver adapter |
 | Validation | Zod |
 | Auth | JWT in an `httpOnly` cookie, bcrypt |
-| AI | Google Gemini API |
+| Recommendations | Google Gemini API for style suggestions; server-side size-chart logic for size suggestions |
 | 3D | Google `model-viewer`, GLB models |
 | Images | Cloudinary, multer |
 | Hosting | Vercel (web) |
@@ -110,6 +112,9 @@ CLOUDINARY_CLOUD_NAME="..."
 CLOUDINARY_API_KEY="..."
 CLOUDINARY_API_SECRET="..."
 GEMINI_API_KEY="..."
+GEMINI_MODEL="gemini-2.5-flash"   # optional; this is the default
+USER_LIMIT="1000"                 # optional daily in-memory AI request limit per user
+GLOBAL_LIMIT="10000"              # optional daily in-memory AI request limit across this API process
 ```
 
 Create `web/.env.local`:
@@ -119,6 +124,8 @@ NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
 
 Never commit these files.
+
+AI request counters are held in the API process's memory. They reset daily and are not shared across multiple API instances.
 
 ### 3. Set up the database
 
@@ -147,10 +154,15 @@ Register a normal account on the site, then open `npx prisma studio` and change 
 | Area | Endpoints |
 |---|---|
 | Auth | `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout` |
-| Products | `GET /api/products`, `GET /api/products/:slug` |
+| Products | `GET /api/products`, `GET /api/products/categories`, `GET /api/products/:slug` |
 | Cart (login required) | `GET /api/cart`, `POST /api/cart/items`, `PATCH /api/cart/items/:id`, `DELETE /api/cart/items/:id` |
 | Orders (login required) | `POST /api/orders`, `GET /api/orders`, `GET /api/orders/:id` |
-| Admin (admin only) | `/api/admin/products`, `/api/admin/variants`, `/api/admin/categories`, `/api/admin/orders`, `/api/admin/images` |
+| Recommendations | `POST /api/recommend/size` (size-chart based); `POST /api/recommend/style` (login required; description and/or optional photo) |
+| Admin products (admin only) | `GET/POST /api/admin/products`, `GET/PUT/DELETE /api/admin/products/:id` |
+| Admin variants (admin only) | `POST /api/admin/products/:id/variants`, `PATCH/DELETE /api/admin/variants/:id` |
+| Admin categories (admin only) | `GET/POST /api/admin/categories` |
+| Admin orders (admin only) | `GET /api/admin/orders`, `PATCH /api/admin/orders/:id/status` |
+| Admin images (admin only) | `POST /api/admin/products/:id/images`, `PATCH /api/admin/products/:id/images/order`, `DELETE /api/admin/images/:id` |
 
 ## Design decisions
 
@@ -159,7 +171,7 @@ Register a normal account on the site, then open `npx prisma studio` and change 
 - **Totals and prices are always calculated on the server** from database values. The client never sends a price.
 - **Ownership checks:** cart items and orders are always looked up together with the logged-in user's id, so one user can never read or change another user's data. The user id comes from the verified token, never from the request body or URL.
 - **Stock is reduced with a conditional update inside a transaction** (`stock >= quantity`), so the database decides who gets the last item.
-- **JWT in an `httpOnly` cookie** instead of `localStorage`, so injected scripts cannot steal the session. The `sameSite` attribute limits cross-site requests.
-- **Input validation with Zod** on every request body, which also strips unexpected fields such as `role`.
+- **JWT in an `httpOnly` cookie** instead of `localStorage`, so page scripts cannot directly read the token. The cookie is `Secure` in production and uses `SameSite=None` there to support cross-site frontend/API requests (`SameSite=Lax` in development).
+- **Input validation with Zod** on API request bodies where applicable; unknown object fields are stripped by default.
 - **Layered backend** (routes, controllers, services) so database code stays out of request handlers.
 
