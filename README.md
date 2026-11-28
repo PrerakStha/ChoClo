@@ -1,15 +1,16 @@
 # ChoClo
 
-A full-stack clothing store built from scratch: customers browse products, pick a size and color, check out with cash on delivery, and follow their orders. Shop owners manage products, stock, images and orders from an admin panel.
+A full-stack clothing store built from scratch: customers browse products, get AI-powered style and size recommendations, view products in 3D, pick a size and color, check out with cash on delivery, and follow their orders. Shop owners manage products, stock, images, 3D models and orders from an admin panel.
 
-> **Live site:** ToDo
+> **Live site:** [cho-clo.vercel.app](https://cho-clo.vercel.app)
 > **Repository:** https://github.com/PrerakStha/ChoClo/
 
-![Home page](docs/screenshots/home.png)
 ![Home page](docs/screenshots/home.png)
 ![Products page](docs/screenshots/products.png)
 ![Products Detail page](docs/screenshots/products1.png)
 ![Admin page](docs/screenshots/admin.png)
+![AI Recommend](docs/screenshots//AIRecommend.png)
+![AI Answer](docs/screenshots/AIAnswer.png)
 
 ## Features
 
@@ -17,6 +18,11 @@ A full-stack clothing store built from scratch: customers browse products, pick 
 - Product listing with a main image and a second image that fades in on hover
 - Product page with an image gallery, selectable size and color, and live stock
 - Responsive home page with a header that changes as you scroll, and a footer with a live Nepal clock
+
+**AI and 3D**
+- Personalised style recommendations from the Google Gemini API, based on the customer's skin, hair and body structure
+- Size recommendations based on the customer's fit preferences
+- Interactive 3D product viewer built with Google's `model-viewer`; admins upload a GLB model for each product
 
 **Accounts**
 - Register, log in and log out
@@ -31,7 +37,7 @@ A full-stack clothing store built from scratch: customers browse products, pick 
 
 **Admin panel** (admin accounts only)
 - Create, edit and delete products with sizes, colors and stock
-- Upload, reorder and delete product images (stored on Cloudinary)
+- Upload, reorder and delete product images (stored on Cloudinary) and attach GLB 3D models
 - Manage categories
 - View all orders and move them through statuses; cancelling an order returns its stock
 
@@ -45,7 +51,10 @@ A full-stack clothing store built from scratch: customers browse products, pick 
 | ORM | Prisma 7 with the `pg` driver adapter |
 | Validation | Zod |
 | Auth | JWT in an `httpOnly` cookie, bcrypt |
+| AI | Google Gemini API |
+| 3D | Google `model-viewer`, GLB models |
 | Images | Cloudinary, multer |
+| Hosting | Vercel (web) |
 
 ## Project structure
 
@@ -76,11 +85,12 @@ ChoClo/
 - Node.js (current LTS)
 - A PostgreSQL database (a free Neon project works well)
 - A Cloudinary account (for product images)
+- A Google Gemini API key (for recommendations)
 
 ### 1. Clone and install
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/PrerakStha/ChoClo.git
 cd ChoClo
 
 cd api && npm install
@@ -99,6 +109,7 @@ FRONTEND_URL="http://localhost:3000"
 CLOUDINARY_CLOUD_NAME="..."
 CLOUDINARY_API_KEY="..."
 CLOUDINARY_API_SECRET="..."
+GEMINI_API_KEY="..."
 ```
 
 Create `web/.env.local`:
@@ -151,14 +162,4 @@ Register a normal account on the site, then open `npx prisma studio` and change 
 - **JWT in an `httpOnly` cookie** instead of `localStorage`, so injected scripts cannot steal the session. The `sameSite` attribute limits cross-site requests.
 - **Input validation with Zod** on every request body, which also strips unexpected fields such as `role`.
 - **Layered backend** (routes, controllers, services) so database code stays out of request handlers.
-
-## Roadmap
-
-- [ ] Search, filters and sorting
-- [ ] Online payments (eSewa, Khalti)
-- [ ] Multi-currency prices for international customers
-- [ ] 3D model viewer for products
-- [ ] AI-powered size and color recommendations
-- [ ] Rate limiting and security headers
-- [ ] Order emails
 
